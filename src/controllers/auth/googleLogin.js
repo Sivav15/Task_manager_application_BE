@@ -20,7 +20,15 @@ const googleLogin = async (req, res) => {
       expiresIn: "1h",
     });
 
-    res.status(200).json({ token: jwtToken, message: "login successfully" });
+    res.status(200).json({
+      token: jwtToken,
+      message: "login successfully",
+      id: user._id,
+      avatar: user.avatar,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({

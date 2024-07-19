@@ -37,7 +37,15 @@ const googleRegister = async (req, res) => {
 
     res
       .status(201)
-      .json({ message: "Registered successfully", token: jwtToken });
+      .json({
+        message: "Registered successfully",
+        token: jwtToken,
+        id: newUser._id,
+        avatar: newUser.avatar,
+        firstName: newUser.firstName,
+        lastName: newUser.lastName,
+        email: newUser.email,
+      });
   } catch (err) {
     console.log(err);
     res.status(500).json({
