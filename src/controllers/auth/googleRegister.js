@@ -1,0 +1,50 @@
+const { default: axios } = require("axios");
+const userModel = require("../../models/user");
+const jwt = require("jsonwebtoken");
+
+const googleRegister = async (req, res) => {
+  try {
+    const { token } = req.body;
+    const { data } = await axios.get(
+      `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${token}`
+    );
+    const { sub, name, picture, email, email_verified } = data;
+    let user = await userModel.findOne({ email });
+    if (user) return res.status(409).json({ message: "User already exists" });
+
+    const newUser = new userModel({
+      googleId: sub,
+      firstName: name,
+      email,
+      emailVerified: email_verified,
+      avatar: picture,
+    });
+
+    await newUser.save();
+
+    const jwtToken = jwt.sign(
+      { userId: newUser._id, email: newUser.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    // res.cookie("token", jwtToken, {
+    //   httpOnly: true, // Ensures the cookie is only accessible by the web server
+    //   secure: process.env.NODE_ENV === "production", // Ensures the cookie is only used over HTTPS
+    //   sameSite: "Strict", // Controls if the cookie is sent with cross-site requests
+    //   maxAge: 3600000, // 1 hour in milliseconds
+    // });
+
+    res
+      .status(201)
+      .json({ message: "Registered successfully", token: jwtToken });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Internal Server Error",
+      error: err.message,
+    });
+  }
+};
+
+module.exports = googleRegister;
