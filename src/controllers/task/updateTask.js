@@ -12,10 +12,11 @@ const updateTask = async (req, res) => {
         message: "Task not found.",
       });
     }
+    const newTask = await taskModel.findById(id);
 
     res.status(200).json({
       message: "Updated successfully.",
-      task: updatedTask,
+      task: newTask,
     });
   } catch (err) {
     res.status(500).json({

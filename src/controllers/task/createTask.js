@@ -1,7 +1,7 @@
 const taskModel = require("../../models/task");
 
 const createTask = async (req, res) => {
-  const { user_id, task, description } = req.body;
+  const { user_id, task, description, status } = req.body;
 
   try {
     const existingTask = await taskModel.findOne({ user_id, task });
@@ -13,13 +13,12 @@ const createTask = async (req, res) => {
     }
 
     // Create a new task
-    const newTask = new taskModel({
+    const newTask = await taskModel.create({
       user_id,
       task,
       description,
+      status,
     });
-
-    await taskModel.save();
 
     res.status(201).json(newTask);
   } catch (err) {

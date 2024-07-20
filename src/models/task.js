@@ -9,6 +9,7 @@ const taskSchema = new mongoose.Schema(
     },
     task: { type: String, required: true },
     description: { type: String },
+    status: { type: String, required: true },
   },
   { timestamps: true }
 );

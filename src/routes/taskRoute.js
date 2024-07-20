@@ -8,17 +8,36 @@ const createTaskSchema = require("../middlewares/validator/task/createTask");
 const viewTasksByUserSchema = require("../middlewares/validator/task/viewTasksByUser");
 const updateTaskSchema = require("../middlewares/validator/task/updateTask");
 const deleteTaskSchema = require("../middlewares/validator/task/deleteTask");
+const authenticateJWT = require("../middlewares/authenticateJWT");
 
 const router = express.Router();
 
 router.get(
-  "/user/:user_id",
+  "/:user_id",
   viewTasksByUserSchema,
   validate,
   viewTasksByUserController
 );
-router.post("/create", createTaskSchema, validate, createTaskController);
-router.put("/update/:id", updateTaskSchema, validate, updateTaskController);
-router.delete("/delete/:id", deleteTaskSchema, validate, deleteTaskController);
+router.post(
+  "/create",
+  authenticateJWT,
+  createTaskSchema,
+  validate,
+  createTaskController
+);
+router.put(
+  "/update/:id",
+  authenticateJWT,
+  updateTaskSchema,
+  validate,
+  updateTaskController
+);
+router.delete(
+  "/delete/:id",
+  authenticateJWT,
+  deleteTaskSchema,
+  validate,
+  deleteTaskController
+);
 
 module.exports = router;

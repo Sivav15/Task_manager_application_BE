@@ -5,7 +5,8 @@ const cookieParser = require("cookie-parser");
 
 const database = require("./src/config/database");
 const authRoute = require("./src/routes/authRoute");
-const task = require("./src/models/task");
+const taskRoute = require("./src/routes/taskRoute");
+
 dotenv.config();
 
 const app = express();
@@ -16,7 +17,7 @@ app.use(cookieParser());
 database();
 
 app.use("/api/auth", authRoute);
-app.use("/api/task", task);
+app.use("/api/tasks", taskRoute);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

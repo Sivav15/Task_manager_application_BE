@@ -7,6 +7,11 @@ module.exports = [
     .notEmpty()
     .withMessage("Task ID is required"),
   body("task").optional().isString().withMessage("Task must be a string"),
+  body("status")
+    .isString()
+    .withMessage("Status must be a string")
+    .notEmpty()
+    .withMessage("Status is required"),
   body("description")
     .optional()
     .isString()
