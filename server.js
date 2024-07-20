@@ -16,6 +16,12 @@ app.use(cookieParser());
 
 database();
 
+app.get("/", (req, res) =>
+  res.status(200).json({
+    message: "server is running successful",
+  })
+);
+
 app.use("/api/auth", authRoute);
 app.use("/api/tasks", taskRoute);
 
