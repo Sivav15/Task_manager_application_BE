@@ -14,6 +14,7 @@ const router = express.Router();
 
 router.get(
   "/:user_id",
+  authenticateJWT,
   viewTasksByUserSchema,
   validate,
   viewTasksByUserController
