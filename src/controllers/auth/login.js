@@ -12,6 +12,12 @@ const login = async (req, res) => {
         message: "User does not exist",
       });
 
+    if (!user.password) {
+      return res.status(400).json({
+        message: "Invalid credentials.",
+      });
+    }
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch)
       return res.status(400).json({
@@ -22,18 +28,17 @@ const login = async (req, res) => {
       expiresIn: "1h",
     });
 
-    res
-      .status(200)
-      .json({
-        token: jwtToken,
-        message: "login successfully",
-        id: user._id,
-        avatar: user.avatar,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-      });
+    res.status(200).json({
+      token: jwtToken,
+      message: "login successfully",
+      id: user._id,
+      avatar: user.avatar,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    });
   } catch (err) {
+    console.log(err);
     res.status(500).json({
       message: "Internal Server Error",
       error: err.message,
